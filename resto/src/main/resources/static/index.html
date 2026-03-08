@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Restaurant Tables</title>
+
+    <style>
+
+        body{
+            font-family:Arial;
+        }
+
+        #hall{
+            display:grid;
+            grid-template-columns:repeat(5,100px);
+            gap:20px;
+            margin-top:20px;
+        }
+
+        .table{
+            width:80px;
+            height:80px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            border-radius:10px;
+            color:white;
+            font-weight:bold;
+        }
+
+        .free{
+            background:green;
+        }
+
+        .reserved{
+            background:red;
+        }
+
+        .recommended{
+            background:gold;
+            color:black;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<h2>Restaurant tables</h2>
+
+Guests:
+<input id="guests" type="number">
+
+Zone:
+<select id="zone">
+    <option value="main hall">Main hall</option>
+    <option value="window">Window</option>
+    <option value="terrace">Terrace</option>
+    <option value="kids">Kids</option>
+</select>
+
+<button onclick="loadRecommendations()">Recommend</button>
+
+<div id="hall"></div>
+
+<script>
+
+    let recommendedTables = []
+
+    async function loadTables(){
+
+        const res = await fetch("/tables")
+        const tables = await res.json()
+
+        const hall = document.getElementById("hall")
+        hall.innerHTML=""
+
+        tables.forEach(t=>{
+
+            let div = document.createElement("div")
+            div.classList.add("table")
+
+            if(recommendedTables.includes(t.id)){
+                div.classList.add("recommended")
+            }else{
+                div.classList.add("free")
+            }
+
+            div.innerText=t.id
+
+            hall.appendChild(div)
+
+        })
+
+    }
+
+    async function loadRecommendations(){
+
+        const guests=document.getElementById("guests").value
+        const zone=document.getElementById("zone").value
+
+        const res = await fetch(`/tables/recommend?guests=${guests}&zone=${zone}`)
+        const tables = await res.json()
+
+        recommendedTables = tables.map(t=>t.id)
+
+        loadTables()
+
+    }
+
+    loadTables()
+
+</script>
+
+</body>
+</html>
