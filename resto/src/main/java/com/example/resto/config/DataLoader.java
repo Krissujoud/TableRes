@@ -10,6 +10,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * loeme lauad sisse
+ */
 @Component
 public class DataLoader {
 
@@ -25,6 +28,7 @@ public class DataLoader {
     public void loadData() {
 
         // WINDOW ZONE
+        // loome suvalised lauad meie restorani
         tableRepo.saveAll(List.of(
                 new Table("T1",4,Zone.WINDOW,80,60),
                 new Table("T2",4,Zone.WINDOW,200,60),
@@ -61,7 +65,7 @@ public class DataLoader {
                 new Table("T20",4,Zone.KIDS_PLAYGROUND,440,460)
         ));
 
-        // RANDOM RESERVATIONS
+        // suvalised
         Random random = new Random();
 
         for (Table table : tableRepo.findAll()) {

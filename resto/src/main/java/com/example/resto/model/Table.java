@@ -34,7 +34,7 @@ public class Table {
         this.y = y;
     }
 
-    // Getters
+    // getterid
     public Long getId() { return id; }
     public String getName() { return name; }
     public int getSeats() { return seats; }

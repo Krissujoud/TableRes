@@ -23,6 +23,7 @@ public class ReservationService {
 
     public List<ReservationDTO> getAllReservations() {
         return reservationRepository.findAll().stream().map(res -> {
+            // Otsime broneeringuga seotud laua
             Table table = tableRepository.findById(res.getTableId()).orElseThrow();
             return new ReservationDTO(res.getId(), table.getName(), res.getStartTime(), res.getEndTime());
         }).collect(Collectors.toList());

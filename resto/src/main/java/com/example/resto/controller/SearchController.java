@@ -18,35 +18,42 @@ public class SearchController {
     private final RecommendationService recommendationService;
     private final TableRepository tableRepository;
 
+    // Süstib teenused kontrollerisse
     public SearchController(RecommendationService recommendationService,
                             TableRepository tableRepository) {
         this.recommendationService = recommendationService;
         this.tableRepository = tableRepository;
     }
 
+    // Võtab vastu /search POST päringu ja tagastab lauaandmed
     @PostMapping("/search")
     public List<TableDTO> search(@RequestBody SearchRequest request) {
 
+        // Kõik lauad andmebaasist
         List<Table> allTables = tableRepository.findAll();
+
+        // Soovitatud lauad vastavalt päringule
         List<Table> recommended = recommendationService.recommend(request);
 
         List<TableDTO> result = new ArrayList<>();
 
+        // Koostame vastuse
         for (Table t : allTables) {
 
             TableDTO dto = new TableDTO();
 
+            // Põhiandmed lauast
             dto.id = t.getId();
             dto.x = t.getX();
             dto.y = t.getY();
             dto.seats = t.getSeats();
 
+            // Märgime, kas laud on kinni ja kas see kuulub soovituste hulka
             dto.reserved = recommendationService.isReserved(t.getId());
             dto.recommended = recommended.contains(t);
 
             result.add(dto);
         }
-
 
         return result;
     }
